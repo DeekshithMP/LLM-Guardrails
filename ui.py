@@ -30,84 +30,95 @@ if "logs" not in st.session_state:
 with st.sidebar:
     st.header("⚙️ Controls")
 
+    threshold = st.slider("Safety Threshold", 0.1, 0.9, 0.6)
+
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.session_state.logs = []
 
-# -------- CHAT -------- #
+# -------- CONTAINERS -------- #
 
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.write(msg["content"])
+chat_container = st.container()
+dashboard_container = st.container()
 
-user_input = st.chat_input("Type your message...")
+# -------- CHAT SECTION -------- #
 
-if user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
+with chat_container:
 
-    with st.chat_message("user"):
-        st.write(user_input)
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
 
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            try:
-                # -------- CLASSIFIER -------- #
-                result = classify_prompt(user_input)
-                category = result["category"]
-                confidence = result["confidence"]
+    user_input = st.chat_input("Type your message...")
 
-                # -------- LOGGING -------- #
-                st.session_state.logs.append({
-                    "text": user_input,
-                    "category": category,
-                    "confidence": confidence
-                })
+    if user_input:
+        st.session_state.messages.append({"role": "user", "content": user_input})
 
-                # -------- BLOCK -------- #
-                if category != "safe":
-                    bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
+        with st.chat_message("user"):
+            st.write(user_input)
 
-                else:
-                    completion = client.chat.completions.create(
-                        model="llama-3.1-8b-instant",
-                        messages=[
-                            {"role": "system", "content": "You are a helpful AI assistant."},
-                            {"role": "user", "content": user_input}
-                        ]
-                    )
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                try:
+                    # -------- CLASSIFIER -------- #
+                    result = classify_prompt(user_input)
+                    category = result["category"]
+                    confidence = result["confidence"]
 
-                    bot_reply = completion.choices[0].message.content
+                    # -------- LOGGING -------- #
+                    st.session_state.logs.append({
+                        "text": user_input,
+                        "category": category,
+                        "confidence": confidence
+                    })
 
-            except Exception as e:
-                bot_reply = f"❌ Error: {str(e)}"
+                    # -------- BLOCK LOGIC -------- #
+                    if category != "safe" and confidence > threshold:
+                        bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
 
-            st.write(bot_reply)
+                    else:
+                        completion = client.chat.completions.create(
+                            model="llama-3.1-8b-instant",
+                            messages=[
+                                {"role": "system", "content": "You are a helpful AI assistant."},
+                                {"role": "user", "content": user_input}
+                            ]
+                        )
 
-    st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+                        bot_reply = completion.choices[0].message.content
 
-# -------- REAL-TIME DASHBOARD -------- #
+                except Exception as e:
+                    bot_reply = f"❌ Error: {str(e)}"
 
-st.divider()
-st.subheader("📊 Real-Time Guardrails Dashboard")
+                st.write(bot_reply)
 
-if st.session_state.logs:
-    df = pd.DataFrame(st.session_state.logs)
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
 
-    total = len(df)
-    blocked = len(df[df["category"] != "safe"])
-    safe = len(df[df["category"] == "safe"])
+# -------- DASHBOARD SECTION -------- #
 
-    col1, col2, col3 = st.columns(3)
+with dashboard_container:
 
-    col1.metric("Total Prompts", total)
-    col2.metric("Blocked", blocked)
-    col3.metric("Safe", safe)
+    st.divider()
+    st.subheader("📊 Real-Time Guardrails Dashboard")
 
-    st.write("### Category Distribution")
-    st.bar_chart(df["category"].value_counts())
+    if st.session_state.logs:
+        df = pd.DataFrame(st.session_state.logs)
 
-    st.write("### Recent Activity")
-    st.dataframe(df.tail(5), use_container_width=True)
+        total = len(df)
+        blocked = len(df[df["category"] != "safe"])
+        safe = len(df[df["category"] == "safe"])
 
-else:
-    st.info("Start chatting to see real-time analytics.")
+        col1, col2, col3 = st.columns(3)
+
+        col1.metric("Total Prompts", total)
+        col2.metric("Blocked", blocked)
+        col3.metric("Safe", safe)
+
+        st.write("### Category Distribution")
+        st.bar_chart(df["category"].value_counts())
+
+        st.write("### Recent Activity")
+        st.dataframe(df.tail(5), use_container_width=True)
+
+    else:
+        st.info("Start chatting to see real-time analytics.")
