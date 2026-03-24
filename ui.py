@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import json
 
-API_URL = "http://127.0.0.1:8000/ask"
+API_URL = "http://127.0.0.1:8001/ask"
 
 st.set_page_config(page_title="AI Guardrails Chat", page_icon="🤖", layout="centered")
 

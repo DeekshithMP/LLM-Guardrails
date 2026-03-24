@@ -1,4 +1,9 @@
 fastapi
 uvicorn
-openai
+streamlit
+requests
+groq
 pydantic
+transformers
+torch
+python-dotenv

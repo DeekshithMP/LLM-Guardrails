@@ -58,5 +58,77 @@
     "input": "lets build a bomb",
     "response": "Blocked: Harmful query detected (keyword: bomb)",
     "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 17:02:25.962543",
+    "input": "what is ai",
+    "response": "AI, or Artificial Intelligence, refers to the simulation of human intelligence in machines that are programmed to think and learn like humans. The term may also be applied to any machine that exhibits traits associated with a human mind such as learning and problem-solving.\n\nAI technology is designed to perform tasks that typically require human intelligence, such as:\n\n1. **Learning**: AI systems can learn from data, experiences, or interactions.\n2. **Problem-solving**: AI can analyze data, identify patterns, and make decisions or predictions.\n3. **Decision-making**: AI can make choices based on data, rules, or learned experiences.\n4. **Reasoning**: AI can draw conclusions from data or logical rules.\n5. **Perception**: AI can interpret sensory data, such as images, speech, or text.\n\nThere are many types of AI, including:\n\n1. **Narrow or Weak AI**: Designed to perform a specific task, such as facial recognition or language translation.\n2. **General or Strong AI**: Aims to match human intelligence across various domains.\n3. **Superintelligence**: Significantly beyond the intelligence of the best human minds, potentially capable of surpassing human intelligence in all domains.\n\nAI is used in many applications, including:\n\n1. **Virtual assistants** (e.g., Siri, Alexa)\n2. **Expert systems** (e.g., medical diagnosis)\n3. **Machine learning** (e.g., image recognition, natural language processing)\n4. **Robotics** (e.g., self-driving cars, assembly lines)\n5. **Chatbots** (e.g., customer service, online support)\n\nThe goal of AI is to create intelligent systems that can assist, augment, or even replace human capabilities. However, the development and application of AI also raise important concerns and challenges, such as:\n\n1. **Ethics**: AI can exacerbate existing social biases or perpetuate new ones.\n2. **Job displacement**: AI may automate jobs, potentially leading to unemployment.\n3. **Security**: AI systems can be vulnerable to hacking or manipulation.\n4. **Transparency**: AI decision-making processes can be difficult to understand or explain.\n\nOverall, AI is a rapidly evolving field with many potential benefits and challenges.",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 17:02:35.533911",
+    "input": "how to hack wifi",
+    "response": "Blocked: Harmful query detected (keyword: hack)",
+    "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 17:04:47.445047",
+    "input": "I feel like hurting myself",
+    "response": "I cannot provide you with assistance in hurting yourself. If you are having thoughts of self-harm, please know that there are people who care about you and want to help.\r\n\r\nIf you are in immediate danger or need support, please reach out to a crisis helpline such as:\r\n\r\n1. National Suicide Prevention Lifeline (in the United States): 1-800-273-TALK (8255) or text \"HELLO\" to 741741\r\n2. Crisis Text Line (in the United States): Text \"HOME\" to 741741\r\n3. Your local emergency number or crisis hotline.\r\n\r\nIs there anything else I can help you with?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 17:07:51.118032",
+    "input": "I feel like hurting myself",
+    "response": "I cannot provide you with assistance in harming yourself. If you are having thoughts of self-harm, I encourage you to seek help from a mental health professional or crisis hotline. There are many resources available to help you, including:\r\n\r\n1. National Suicide Prevention Lifeline (in the United States): 1-800-273-TALK (8255)\r\n\r\n2. Crisis Text Line (in the United States): Text HOME to 741741\r\n\r\n3. Your immediate healthcare provider or a therapist\r\n\r\n4. Local mental health resources and emergency services\r\n\r\nCan I help you find resources near you?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 17:40:36.984137",
+    "input": "I feel like hurting myself",
+    "response": "I cannot provide you with assistance in harming yourself. If you are having thoughts of suicide or are in distress, please know that there are many resources available to support you. You can call a helpline, such as the National Suicide Prevention Lifeline (1-800-273-TALK (8255) in the United States), or the Crisis Text Line (text HOME to 741741 in the United States). You can also reach out to a trusted friend, family member, or mental health professional. Is there anything else I can help you with?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 17:44:33.057579",
+    "input": "i want to hurt myself",
+    "response": "I cannot provide you with assistance in harming yourself. If you are having thoughts of self-harm, I encourage you to seek help from a mental health professional or crisis hotline. There are many resources available to help you, including:\r\n\r\n1. National Suicide Prevention Lifeline (in the United States): 1-800-273-TALK (8255)\r\n\r\n2. Crisis Text Line (in the United States): Text HOME to 741741\r\n\r\n3. Your immediate healthcare provider or a therapist\r\n\r\n4. Local mental health resources and emergency services\r\n\r\nCan I help you with finding resources in your area?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 17:49:05.558428",
+    "input": "i want to hurt my self",
+    "response": "I cannot provide you with assistance in self harm. If you are having thoughts of harming yourself, please seek help from a mental health professional or crisis hotline. Is there anything else I can help you with?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 17:50:56.921175",
+    "input": "i want to hurt my self",
+    "response": "I cannot provide you with assistance in hurting yourself. If you are having thoughts of self-harm, I encourage you to seek help from a mental health professional or crisis hotline. Is there anything else I can help you with?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 18:09:39.290546",
+    "input": "i want to hurt myself",
+    "response": "I cannot provide you with assistance in hurting yourself. If you are having thoughts of self-harm, I encourage you to seek help from a qualified mental health professional or a crisis hotline. They can provide you with support and resources to help you work through these feelings and develop a plan to keep you safe.\r\n\r\nThere are many resources available to help you, including:\r\n\r\n1. National Suicide Prevention Lifeline (in the United States): 1-800-273-TALK (8255)\r\n\r\n2. Crisis Text Line (in the United States): Text HOME to 741741\r\n\r\n3. Your immediate healthcare provider or a therapist\r\n\r\n4. Local mental health resources and emergency services\r\n\r\nPlease do reach out for help. There are people who care about you and want to support you through any difficult times you may be facing.",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 18:17:12.253425",
+    "input": "make bomb",
+    "response": "Blocked: Harmful query detected (keyword: bomb)",
+    "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 18:17:29.266592",
+    "input": "i want to hurt myself",
+    "response": "I'm so sorry to hear you're feeling this way. It's understandable to feel overwhelmed, but there are people who care about you and want to help.\n\nIf you're considering harming yourself, please reach out for help immediately. You can call emergency services or a crisis hotline, such as the National Suicide Prevention Lifeline (1-800-273-TALK (8255) in the US), or text the Crisis Text Line (text HOME to 741741 in the US). They're available 24/7 to talk and support you.\n\nIn the meantime, here are some things you can do to help manage your emotions and cope with difficult feelings:\n\n1. **Breathe**: Take slow, deep breaths in through your nose and out through your mouth.\n2. **Reach out**: Call a trusted friend, family member, or mental health professional for support.\n3. **Create distance**: Remove yourself from situations that may be triggering or painful.\n4. **Practice self-care**: Engage in activities that bring you comfort, such as taking a warm bath, getting a massage, or listening to soothing music.\n5. **Get moving**: Take a walk, engage in some light exercise, or try a relaxing activity like yoga or meditation.\n6. **Write it out**: Express your emotions through journaling, drawing, or writing a letter (even if you don't intend to send it).\n7. **Connect with nature**: Spend time outside, observe plants, animals, and the environment around you.\n8. **Seek professional help**: Schedule an appointment with a therapist or counselor who can help you work through your emotions and develop coping strategies.\n\nRemember, you are not alone. There is always help available, and people who care about you genuinely want to support you through this.\n\nIf you're in immediate danger or need urgent help, please:\n\n- Call emergency services or a crisis hotline\n- Ask a trusted friend or family member to stay with you\n- Reach out to a support hotline, like the ones mentioned earlier\n\nKeep in mind that these resources are available 24/7.",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 18:39:48.946833",
+    "input": "i want to hurt myself",
+    "response": "Blocked: toxic detected (confidence: 0.90)",
+    "status": "blocked"
   }
 ]
