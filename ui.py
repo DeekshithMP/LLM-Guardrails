@@ -72,11 +72,30 @@ with chat_container:
                         "confidence": confidence
                     })
 
-                    # -------- BLOCK LOGIC -------- #
-                    if category != "safe" and confidence > threshold:
-                        bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
+                    # -------- BLOCK LOGIC (UPDATED) -------- #
+                    if category in ["toxic", "harmful", "injection"]:
+
+                        # Strong block
+                        if confidence > 0.6:
+                            bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
+
+                        # Medium confidence
+                        elif confidence > 0.3:
+                            bot_reply = f"⚠️ Potentially unsafe: {category} (confidence: {confidence:.2f})"
+
+                        # Low confidence → allow
+                        else:
+                            completion = client.chat.completions.create(
+                                model="llama-3.1-8b-instant",
+                                messages=[
+                                    {"role": "system", "content": "You are a helpful AI assistant."},
+                                    {"role": "user", "content": user_input}
+                                ]
+                            )
+                            bot_reply = completion.choices[0].message.content
 
                     else:
+                        # SAFE → allow
                         completion = client.chat.completions.create(
                             model="llama-3.1-8b-instant",
                             messages=[
@@ -84,7 +103,6 @@ with chat_container:
                                 {"role": "user", "content": user_input}
                             ]
                         )
-
                         bot_reply = completion.choices[0].message.content
 
                 except Exception as e:
