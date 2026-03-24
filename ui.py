@@ -25,92 +25,99 @@ if "messages" not in st.session_state:
 if "logs" not in st.session_state:
     st.session_state.logs = []
 
+if "view" not in st.session_state:
+    st.session_state.view = "Chat"
+
 # -------- SIDEBAR -------- #
 
 with st.sidebar:
     st.header("⚙️ Controls")
 
+    # View selector
+    view_option = st.radio("View Mode", ["Chat", "Dashboard"])
+
+    st.session_state.view = view_option
+
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.session_state.logs = []
 
-# -------- CHAT HISTORY -------- #
+# -------- CHAT VIEW -------- #
 
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.write(msg["content"])
+if st.session_state.view == "Chat":
 
-# -------- USER INPUT -------- #
+    # Show chat history
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
 
-user_input = st.chat_input("Type your message...")
+    # User input
+    user_input = st.chat_input("Type your message...")
 
-if user_input:
-    # Show user message
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    if user_input:
+        st.session_state.messages.append({"role": "user", "content": user_input})
 
-    with st.chat_message("user"):
-        st.write(user_input)
+        with st.chat_message("user"):
+            st.write(user_input)
 
-    # Assistant response
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            try:
-                # -------- CLASSIFIER -------- #
-                result = classify_prompt(user_input)
-                category = result["category"]
-                confidence = result["confidence"]
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                try:
+                    # -------- CLASSIFIER -------- #
+                    result = classify_prompt(user_input)
+                    category = result["category"]
+                    confidence = result["confidence"]
 
-                # -------- LOGGING -------- #
-                st.session_state.logs.append({
-                    "text": user_input,
-                    "category": category,
-                    "confidence": confidence
-                })
+                    # -------- LOGGING -------- #
+                    st.session_state.logs.append({
+                        "text": user_input,
+                        "category": category,
+                        "confidence": confidence
+                    })
 
-                # -------- BLOCK IF UNSAFE -------- #
-                if category != "safe":
-                    bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
+                    # -------- BLOCK -------- #
+                    if category != "safe":
+                        bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
 
-                else:
-                    # -------- LLM CALL -------- #
-                    completion = client.chat.completions.create(
-                        model="llama-3.1-8b-instant",
-                        messages=[
-                            {"role": "system", "content": "You are a helpful AI assistant."},
-                            {"role": "user", "content": user_input}
-                        ]
-                    )
+                    else:
+                        completion = client.chat.completions.create(
+                            model="llama-3.1-8b-instant",
+                            messages=[
+                                {"role": "system", "content": "You are a helpful AI assistant."},
+                                {"role": "user", "content": user_input}
+                            ]
+                        )
 
-                    bot_reply = completion.choices[0].message.content
+                        bot_reply = completion.choices[0].message.content
 
-            except Exception as e:
-                bot_reply = f"❌ Error: {str(e)}"
+                except Exception as e:
+                    bot_reply = f"❌ Error: {str(e)}"
 
-            st.write(bot_reply)
+                st.write(bot_reply)
 
-    # Save assistant message
-    st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
 
-# -------- DASHBOARD -------- #
+# -------- DASHBOARD VIEW -------- #
 
-st.divider()
-st.subheader("📊 Guardrails Dashboard")
+elif st.session_state.view == "Dashboard":
 
-if st.session_state.logs:
-    df = pd.DataFrame(st.session_state.logs)
+    st.subheader("📊 Guardrails Dashboard")
 
-    total = len(df)
-    blocked = len(df[df["category"] != "safe"])
-    safe = len(df[df["category"] == "safe"])
+    if st.session_state.logs:
+        df = pd.DataFrame(st.session_state.logs)
 
-    col1, col2, col3 = st.columns(3)
+        total = len(df)
+        blocked = len(df[df["category"] != "safe"])
+        safe = len(df[df["category"] == "safe"])
 
-    col1.metric("Total Prompts", total)
-    col2.metric("Blocked", blocked)
-    col3.metric("Safe", safe)
+        col1, col2, col3 = st.columns(3)
 
-    st.write("### Category Distribution")
-    st.bar_chart(df["category"].value_counts())
+        col1.metric("Total Prompts", total)
+        col2.metric("Blocked", blocked)
+        col3.metric("Safe", safe)
 
-else:
-    st.info("No data yet. Start chatting to see analytics.")
+        st.write("### Category Distribution")
+        st.bar_chart(df["category"].value_counts())
+
+    else:
+        st.info("No data yet. Start chatting to see analytics.")
