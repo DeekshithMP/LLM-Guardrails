@@ -1,41 +1,28 @@
 import streamlit as st
-import requests
-import json
+import os
+from groq import Groq
+from classifier import classify_prompt
 
-API_URL = "http://127.0.0.1:8001/ask"
-
-st.set_page_config(page_title="AI Guardrails Chat", page_icon="🤖", layout="centered")
+# Page config
+st.set_page_config(
+    page_title="AI Guardrails Chat",
+    page_icon="🤖",
+    layout="centered"
+)
 
 st.title("🤖 AI Guardrails Chat")
 st.caption("Safe AI assistant with real-time guardrails")
 
-# -------- Sidebar -------- #
+# Initialize Groq client
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+# Sidebar
 with st.sidebar:
     st.header("⚙️ Controls")
-
     if st.button("Clear Chat"):
         st.session_state.messages = []
 
-    st.divider()
-
-    st.subheader("📜 Recent Logs")
-
-    try:
-        with open("logs.json", "r") as f:
-            logs = json.load(f)
-
-        if logs:
-            for log in reversed(logs[-5:]):  # last 5 logs
-                st.write(f"**Input:** {log['input']}")
-                st.write(f"**Status:** {log['status']}")
-                st.divider()
-        else:
-            st.write("No logs yet")
-
-    except:
-        st.write("No logs file found")
-
-# -------- Chat History -------- #
+# Chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -43,7 +30,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# -------- User Input -------- #
+# User input
 user_input = st.chat_input("Type your message...")
 
 if user_input:
@@ -52,20 +39,33 @@ if user_input:
     with st.chat_message("user"):
         st.write(user_input)
 
-    # Get response from backend
+    # Assistant response
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                response = requests.post(API_URL, json={"query": user_input})
-                result = response.json()
+                # -------- CLASSIFIER -------- #
+                result = classify_prompt(user_input)
+                category = result["category"]
+                confidence = result["confidence"]
 
-                if "response" in result:
-                    bot_reply = result["response"]
+                # -------- BLOCK IF UNSAFE -------- #
+                if category != "safe":
+                    bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
+
                 else:
-                    bot_reply = f"Error: {result}"
+                    # -------- LLM CALL -------- #
+                    completion = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[
+                            {"role": "system", "content": "You are a helpful AI assistant."},
+                            {"role": "user", "content": user_input}
+                        ]
+                    )
+
+                    bot_reply = completion.choices[0].message.content
 
             except Exception as e:
-                bot_reply = f"Error: {str(e)}"
+                bot_reply = f"❌ Error: {str(e)}"
 
             st.write(bot_reply)
 
