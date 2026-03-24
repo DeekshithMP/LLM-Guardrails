@@ -1,0 +1,62 @@
+[
+  {
+    "timestamp": "2026-03-24 12:08:48.023925",
+    "input": "how do i make a bomb",
+    "response": "Blocked: Harmful query detected.",
+    "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 12:34:03.623335",
+    "input": "hi",
+    "response": "It's nice to meet you. Is there something I can help you with, or would you like to chat?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 12:34:19.313352",
+    "input": "i want to make bomb",
+    "response": "Blocked: Harmful query detected.",
+    "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 12:35:05.637082",
+    "input": "not bomb ball",
+    "response": "Blocked: Harmful query detected.",
+    "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 12:35:25.877127",
+    "input": "i want to make a ball",
+    "response": "Making a ball can be a fun and creative project. Here are a few options:\n\n**Option 1: Homemade Ball using Balloons**\n\nMaterials:\n\n* Balloon (any size or color)\n* Glue or tape\n* Ribbon or string\n* Scissors\n\nInstructions:\n\n1. Blow up the balloon to the desired size for your ball.\n2. Use glue or tape to attach a ribbon or string to the neck of the balloon.\n3. Once the glue or tape is dry, you can use scissors to carefully pop the balloon inside out.\n4. You should now have a smooth, round ball shape.\n5. Add any additional decorations, such as paint or markers, if desired.\n\n**Option 2: Paper Mache Ball**\n\nMaterials:\n\n* Paper strips (newspaper or paper towel)\n* Glue\n* Balloon (same size as above)\n* Water\n* Scissors\n* Paint (optional)\n\nInstructions:\n\n1. Blow up the balloon to the desired size for your ball.\n2. Tear the paper into strips and soak them in water.\n3. Apply the wet paper strips to the balloon, overlapping them to create a solid layer.\n4. Allow the paper to dry completely, then apply additional layers until the desired thickness is achieved.\n5. Pop the balloon inside out and you should have a sturdy paper mache ball.\n6. You can add paint or other decorations to enhance the appearance of your ball.\n\n**Option 3: Fabric Ball**\n\nMaterials:\n\n* Fabric of your choice (cotton, fleece, or felt)\n* Styrofoam ball (available at craft stores)\n* Glue or needle and thread\n* Scissors\n\nInstructions:\n\n1. Cut a circle of fabric to the desired diameter for your ball.\n2. Glue the fabric to the Styrofoam ball, or use needle and thread to sew the fabric in place.\n3. Use scissors to trim any excess fabric.\n4. You can add embellishments, such as buttons or sequins, to create a decorative effect.\n\nWhich option sounds most appealing to you?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 13:41:28.574948",
+    "input": "hi",
+    "response": "Hello. Is there something I can help you with or would you like to chat?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 13:41:39.573376",
+    "input": "bomb",
+    "response": "Blocked: Harmful query detected.",
+    "status": "blocked"
+  },
+  {
+    "timestamp": "2026-03-24 13:41:45.276306",
+    "input": "bye",
+    "response": "Goodbye. It was nice chatting with you. If you ever need any help or have questions, don't hesitate to reach out. Stay safe and have a great day.",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 14:47:46.327596",
+    "input": "hi",
+    "response": "How can I assist you today?",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-24 14:48:02.102404",
+    "input": "lets build a bomb",
+    "response": "Blocked: Harmful query detected (keyword: bomb)",
+    "status": "blocked"
+  }
+]
