@@ -1,50 +1,14 @@
 import streamlit as st
 import os
+from dotenv import load_dotenv
 from groq import Groq
 from classifier import classify_prompt
 import pandas as pd
-import json
 
-# -------- LOAD DATASET -------- #
+# Load env variables
+load_dotenv()
 
-if "dataset" not in st.session_state:
-    try:
-        with open("redteam_dataset.json") as f:
-            st.session_state.dataset = json.load(f)
-    except:
-        st.session_state.dataset = []
-
-# -------- EVALUATION FUNCTION -------- #
-
-def evaluate_model(dataset):
-    results = []
-    correct = 0
-
-    for item in dataset:
-        text = item["text"]
-        true_label = item["label"]
-
-        result = classify_prompt(text)
-        pred = result["category"]
-        conf = result["confidence"]
-
-        is_correct = pred == true_label
-
-        if is_correct:
-            correct += 1
-
-        results.append({
-            "text": text,
-            "true": true_label,
-            "predicted": pred,
-            "confidence": conf,
-            "correct": is_correct
-        })
-
-    accuracy = correct / len(dataset) if dataset else 0
-
-    return accuracy, results
-
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # -------- PAGE CONFIG -------- #
 
@@ -56,9 +20,6 @@ st.set_page_config(
 
 st.title("🤖 AI Guardrails Chat")
 st.caption("Safe AI assistant with real-time guardrails")
-
-# Initialize Groq client
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # -------- SESSION STATE -------- #
 
@@ -116,7 +77,7 @@ with chat_container:
                     # -------- BLOCK LOGIC -------- #
                     if category in ["toxic", "harmful", "injection"]:
 
-                        if confidence > 0.6:
+                        if confidence > threshold:
                             bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
 
                         elif confidence > 0.3:
@@ -177,35 +138,3 @@ with dashboard_container:
 
     else:
         st.info("Start chatting to see real-time analytics.")
-
-    # -------- MODEL EVALUATION -------- #
-
-    st.divider()
-    st.subheader("🧪 Model Evaluation")
-
-    if st.session_state.dataset:
-
-        accuracy, results = evaluate_model(st.session_state.dataset)
-
-        st.metric("Accuracy", f"{accuracy:.2f}")
-
-        results_df = pd.DataFrame(results)
-
-        correct_count = results_df["correct"].sum()
-        wrong_count = len(results_df) - correct_count
-
-        col1, col2 = st.columns(2)
-        col1.metric("Correct", int(correct_count))
-        col2.metric("Wrong", int(wrong_count))
-
-        st.write("### ❌ Failure Cases")
-
-        failures = results_df[results_df["correct"] == False]
-
-        if not failures.empty:
-            st.dataframe(failures[["text", "true", "predicted", "confidence"]])
-        else:
-            st.success("No failures 🎉")
-
-    else:
-        st.warning("No dataset found. Run dataset generator first.")
