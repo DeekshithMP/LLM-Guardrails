@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from groq import Groq
 from classifier import classify_prompt
+import pandas as pd
 
 # Page config
 st.set_page_config(
@@ -16,26 +17,37 @@ st.caption("Safe AI assistant with real-time guardrails")
 # Initialize Groq client
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# Sidebar
-with st.sidebar:
-    st.header("⚙️ Controls")
-    if st.button("Clear Chat"):
-        st.session_state.messages = []
+# -------- SESSION STATE -------- #
 
-# Chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+if "logs" not in st.session_state:
+    st.session_state.logs = []
+
+# -------- SIDEBAR -------- #
+
+with st.sidebar:
+    st.header("⚙️ Controls")
+
+    if st.button("Clear Chat"):
+        st.session_state.messages = []
+        st.session_state.logs = []
+
+# -------- CHAT HISTORY -------- #
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# User input
+# -------- USER INPUT -------- #
+
 user_input = st.chat_input("Type your message...")
 
 if user_input:
     # Show user message
     st.session_state.messages.append({"role": "user", "content": user_input})
+
     with st.chat_message("user"):
         st.write(user_input)
 
@@ -47,6 +59,13 @@ if user_input:
                 result = classify_prompt(user_input)
                 category = result["category"]
                 confidence = result["confidence"]
+
+                # -------- LOGGING -------- #
+                st.session_state.logs.append({
+                    "text": user_input,
+                    "category": category,
+                    "confidence": confidence
+                })
 
                 # -------- BLOCK IF UNSAFE -------- #
                 if category != "safe":
@@ -71,3 +90,27 @@ if user_input:
 
     # Save assistant message
     st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+
+# -------- DASHBOARD -------- #
+
+st.divider()
+st.subheader("📊 Guardrails Dashboard")
+
+if st.session_state.logs:
+    df = pd.DataFrame(st.session_state.logs)
+
+    total = len(df)
+    blocked = len(df[df["category"] != "safe"])
+    safe = len(df[df["category"] == "safe"])
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Total Prompts", total)
+    col2.metric("Blocked", blocked)
+    col3.metric("Safe", safe)
+
+    st.write("### Category Distribution")
+    st.bar_chart(df["category"].value_counts())
+
+else:
+    st.info("No data yet. Start chatting to see analytics.")
