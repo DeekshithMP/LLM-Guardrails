@@ -1,12 +1,10 @@
 from transformers import pipeline
 
-# Zero-shot classifier
 classifier = pipeline(
     "zero-shot-classification",
     model="facebook/bart-large-mnli"
 )
 
-# Categories
 CATEGORIES = [
     "safe",
     "toxic",
@@ -19,33 +17,31 @@ CATEGORIES = [
 def classify_prompt(text):
     text_lower = text.lower()
 
-    # -------- SAFETY OVERRIDE (CRITICAL) -------- #
-    # Handles cases ML might miss
+    # -------- STRONG SAFETY OVERRIDES -------- #
+
+    # Self-harm
     if any(word in text_lower for word in ["hurt", "kill", "suicide", "die", "harm"]):
-        return {
-            "category": "toxic",
-            "confidence": 0.95
-        }
+        return {"category": "toxic", "confidence": 0.95}
 
-    if any(word in text_lower for word in ["hack", "bomb", "attack", "exploit"]):
-        return {
-            "category": "harmful",
-            "confidence": 0.9
-        }
+    # Hacking / illegal
+    if "hack" in text_lower:
+        return {"category": "harmful", "confidence": 0.95}
 
+    # Dangerous actions
+    if any(word in text_lower for word in ["bomb", "attack", "weapon"]):
+        return {"category": "harmful", "confidence": 0.9}
+
+    # Injection
     if "ignore previous instructions" in text_lower:
-        return {
-            "category": "injection",
-            "confidence": 0.9
-        }
+        return {"category": "injection", "confidence": 0.9}
 
     # -------- ML CLASSIFICATION -------- #
+
     result = classifier(text, CATEGORIES)
 
     top_label = result["labels"][0]
     confidence = float(result["scores"][0])
 
-    # -------- MAPPING -------- #
     if top_label == "self-harm":
         return {"category": "toxic", "confidence": confidence}
 
