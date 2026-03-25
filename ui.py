@@ -40,6 +40,20 @@ with st.sidebar:
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.session_state.logs = []
+    if st.button("Clear Chat"):
+        st.session_state.messages = []
+        st.session_state.logs = []
+
+    st.divider()
+    st.subheader("📝 Recent Searches")
+
+    if st.session_state.logs:
+        for log in reversed(st.session_state.logs[-5:]):
+            st.write(f"**Query:** {log['text']}")
+            st.write(f"Category: {log['category']} ({log['confidence']:.2f})")
+            st.divider()
+    else:
+        st.write("No searches yet.")
 
 # -------- CONTAINERS -------- #
 
