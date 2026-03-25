@@ -33,7 +33,7 @@ User Input → Classifier → Decision Layer → LLM / Block → UI
 
 ```bash
 # 1. Clone repo
-git clone <your-repo-link>
+git clone https://github.com/DeekshithMP/LLM-Guardrails.git
 
 # 2. Move into project
 cd llm-guardrails
