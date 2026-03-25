@@ -37,20 +37,18 @@ with st.sidebar:
 
     threshold = st.slider("Safety Threshold", 0.1, 0.9, 0.6)
 
-    if st.button("Clear Chat"):
-        st.session_state.messages = []
-        st.session_state.logs = []
-    if st.button("Clear Chat"):
+    if st.button("Clear Chat", key="clear_chat_btn"):
         st.session_state.messages = []
         st.session_state.logs = []
 
+    # -------- NEW FEATURE -------- #
     st.divider()
     st.subheader("📝 Recent Searches")
 
     if st.session_state.logs:
         for log in reversed(st.session_state.logs[-5:]):
-            st.write(f"**Query:** {log['text']}")
-            st.write(f"Category: {log['category']} ({log['confidence']:.2f})")
+            st.write(f"• {log['text']}")
+            st.write(f"{log['category']} ({log['confidence']:.2f})")
             st.divider()
     else:
         st.write("No searches yet.")
