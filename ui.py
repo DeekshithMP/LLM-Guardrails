@@ -8,6 +8,7 @@ import pandas as pd
 # Load env variables
 load_dotenv()
 
+# Initialize Groq client
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # -------- PAGE CONFIG -------- #
@@ -68,21 +69,26 @@ with chat_container:
                     category = result["category"]
                     confidence = result["confidence"]
 
+                    # Log
                     st.session_state.logs.append({
                         "text": user_input,
                         "category": category,
                         "confidence": confidence
                     })
 
-                    # -------- BLOCK LOGIC -------- #
-                    if category in ["toxic", "harmful", "injection"]:
+                    # -------- BALANCED BLOCK LOGIC -------- #
 
-                        if confidence > threshold:
+                    if category != "safe":
+
+                        # Strong block
+                        if confidence >= threshold:
                             bot_reply = f"🚫 Blocked: {category} detected (confidence: {confidence:.2f})"
 
-                        elif confidence > 0.3:
+                        # Medium confidence → warning
+                        elif confidence >= 0.4:
                             bot_reply = f"⚠️ Potentially unsafe: {category} (confidence: {confidence:.2f})"
 
+                        # Low confidence → allow
                         else:
                             completion = client.chat.completions.create(
                                 model="llama-3.1-8b-instant",
@@ -94,6 +100,7 @@ with chat_container:
                             bot_reply = completion.choices[0].message.content
 
                     else:
+                        # SAFE → allow
                         completion = client.chat.completions.create(
                             model="llama-3.1-8b-instant",
                             messages=[
